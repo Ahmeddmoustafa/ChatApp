@@ -1,7 +1,11 @@
+import 'package:chat_app/Cubit/ChatPage/chat_cubit.dart';
 import 'package:chat_app/Presentation/auth/auth_services.dart';
 import 'package:chat_app/Resources/Managers/colors_manager.dart';
+import 'package:chat_app/Resources/Managers/routes_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             return const Text("ERROR");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("WAITING");
+            return const CircularProgressIndicator();
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -47,8 +52,22 @@ class _HomePageState extends State<HomePage> {
 
   Widget getChatUser(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-    return ListTile(
-      title: Text(data["email"]),
-    );
+    if (_auth.currentUser!.uid != data["uid"]) {
+      return GestureDetector(
+        onTap: () {
+          BlocProvider.of<ChatCubit>(context)
+              .openChat(data["email"], data["uid"]);
+          Navigator.pushNamed(context, Routes.chatRoute);
+        },
+        child: ListTile(
+          leading: const Icon(
+            Icons.supervised_user_circle,
+          ),
+          title: Text(data["email"]),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }

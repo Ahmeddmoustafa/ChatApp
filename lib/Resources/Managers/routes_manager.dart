@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:chat_app/Cubit/ChatPage/chat_cubit.dart';
 import 'package:chat_app/Cubit/Login/login_cubit.dart';
 import 'package:chat_app/Cubit/Register/register_cubit.dart';
 import 'package:chat_app/Presentation/auth/auth_gate.dart';
+import 'package:chat_app/Presentation/chat_page.dart';
 import 'package:chat_app/Resources/Managers/strings_manager.dart';
 import 'package:chat_app/Presentation/register.dart';
 import 'package:chat_app/Presentation/sign_in.dart';
@@ -13,6 +15,7 @@ class Routes {
   static const String mainRoute = '/main';
   static const String apartmentRoute = '/apartment';
   static const String authRoute = '/auth';
+  static const String chatRoute = '/chat';
 
   static const String splashRoute = '/';
   static const String signInRoute = '/signin';
@@ -54,6 +57,14 @@ class RouteGenerator {
           return MaterialPageRoute(
             builder: (context) => SafeArea(
               child: AuthGate(),
+            ),
+          );
+        }
+      case Routes.chatRoute:
+        {
+          return MaterialPageRoute(
+            builder: (context) => SafeArea(
+              child: ChatPage(),
             ),
           );
         }
