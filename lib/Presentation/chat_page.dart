@@ -1,5 +1,8 @@
+import 'package:chat_app/Cubit/Call/call_cubit.dart';
 import 'package:chat_app/Cubit/ChatPage/chat_cubit.dart';
 import 'package:chat_app/Presentation/chat_bubble.dart';
+import 'package:chat_app/Resources/Managers/colors_manager.dart';
+import 'package:chat_app/Resources/Managers/routes_manager.dart';
 import 'package:chat_app/Resources/Managers/values_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,9 +28,33 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final chatinfo = BlocProvider.of<ChatCubit>(context);
+    final callinfo = BlocProvider.of<CallCubit>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(chatinfo.recieverEmail),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            Icons.arrow_back,
+            color: ColorManager.White,
+          ),
+        ),
+        title: Text(chatinfo.recieverName),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, Routes.callingRoute);
+              // await callinfo.callUser(chatinfo.recieverUid, chatinfo.recieverEmail);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: AppSize.s10),
+              child: Icon(
+                Icons.call,
+                color: ColorManager.White,
+              ),
+            ),
+          )
+        ],
       ),
       body: BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {

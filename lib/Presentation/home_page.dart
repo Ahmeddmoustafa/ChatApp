@@ -27,7 +27,10 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 AuthService().signOut();
               },
-              icon: const Icon(Icons.logout))
+              icon: Icon(
+                Icons.logout,
+                color: ColorManager.White,
+              ))
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(

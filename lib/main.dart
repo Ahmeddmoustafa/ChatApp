@@ -1,3 +1,4 @@
+import 'package:chat_app/Cubit/Call/call_cubit.dart';
 import 'package:chat_app/Cubit/ChatPage/chat_cubit.dart';
 import 'package:chat_app/Presentation/chat_page.dart';
 import 'package:chat_app/Resources/Managers/routes_manager.dart';
@@ -20,8 +21,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChatCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ChatCubit(),
+        ),
+        BlocProvider(
+          create: (context) => CallCubit(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: getApplicationtheme(false),

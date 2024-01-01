@@ -18,11 +18,12 @@ dependencies:
   email_validator: ^2.1.16
   bloc: ^8.1.2
   bloc_provider: ^1.0.0
-
   firebase_core: 
   firebase_auth:   
   cloud_firestore: 
   cupertino_icons: ^1.0.2
+  agora_uikit:
+
 
 dev_dependencies:
   flutter_test:

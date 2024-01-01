@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/Models/call.dart';
 import 'package:chat_app/Models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ class ChatCubit extends Cubit<ChatState> {
   late String recieverEmail;
   late String recieverUid;
   late String chatRoomId;
+  late String recieverName;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   ChatCubit() : super(ChatInitial());
@@ -25,6 +27,8 @@ class ChatCubit extends Cubit<ChatState> {
     emit(ChatInitial());
     recieverEmail = email;
     recieverUid = id;
+    int atIndex = recieverEmail.indexOf('@');
+    recieverName = recieverEmail.substring(0, atIndex).toUpperCase();
     emit(ChatOpened());
   }
 
