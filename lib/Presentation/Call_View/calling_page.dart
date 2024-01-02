@@ -13,8 +13,26 @@ class CallingPage extends StatelessWidget {
     final CallCubit callInfo = BlocProvider.of<CallCubit>(context);
     return Scaffold(
       body: !reciever
-          ? const Center(
-              child: Text("CALLING!!!"),
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("CALLING!!!"),
+                  TextButton(
+                    onPressed: () async {
+                      await callInfo.endCall();
+                      if (context.mounted) {
+                        Navigator.pushReplacementNamed(
+                            context, Routes.authRoute);
+                      }
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(ColorManager.error)),
+                    child: const Text("CANCEL"),
+                  )
+                ],
+              ),
             )
           : Center(
               child: Column(
@@ -32,7 +50,7 @@ class CallingPage extends StatelessWidget {
                       await callInfo.endCall();
                       if (context.mounted) {
                         Navigator.pushReplacementNamed(
-                            context, Routes.homeRoute);
+                            context, Routes.authRoute);
                       }
                     },
                     style: ButtonStyle(

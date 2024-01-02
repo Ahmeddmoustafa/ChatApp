@@ -14,76 +14,72 @@ class CallCubit extends Cubit<CallState> {
 
   CallCubit() : super(CallInitial());
 
-  void cancelCall() {}
-
   Future<void> endCall() async {
-    await _firestore.collection("call_rooms").doc(recieverID).delete();
-    calling = false;
-    emit(EndCall());
+    try {
+      await _firestore.collection("call_rooms").doc(recieverID).delete();
+      calling = false;
+      emit(EndCall());
+    } on FirebaseException catch (err) {
+      emit(CallError(msg: err.message.toString()));
+    }
   }
 
   void acceptCall() async {
     final String currUserId = _firebaseAuth.currentUser!.uid;
     final String currUserEmail = _firebaseAuth.currentUser!.email.toString();
-
-    final QuerySnapshot querySnapshot = await _firestore
-        .collection("call_rooms")
-        .doc(currUserId)
-        .collection("call")
-        .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      int length = querySnapshot.docs.length;
-      final QueryDocumentSnapshot callData = querySnapshot.docs[length - 1];
-      recieverID = currUserId;
-      callerID = callData["callerId"].toString();
-      String callerEmail = callData["callerEmail"].toString();
-
-      calling = true;
-      print("the user $callerID is calling");
-
-      final Call call = Call(
-        callerID: callerID!,
-        callerEmail: callerEmail,
-        recieverID: recieverID!,
-        recieverEmail: currUserEmail,
-        timestamp: Timestamp.now(),
-        status: "ACCEPTED",
-      );
-
-      await _firestore
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
           .collection("call_rooms")
           .doc(currUserId)
           .collection("call")
-          .add(call.toMap());
-      emit(CallAccepted());
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        int length = querySnapshot.docs.length;
+        final QueryDocumentSnapshot callData = querySnapshot.docs[length - 1];
+        recieverID = currUserId;
+        callerID = callData["callerId"].toString();
+        String callerEmail = callData["callerEmail"].toString();
+
+        calling = true;
+        print("the user $callerID is calling");
+
+        final Call call = Call(
+          callerID: callerID!,
+          callerEmail: callerEmail,
+          recieverID: recieverID!,
+          recieverEmail: currUserEmail,
+          timestamp: Timestamp.now(),
+          status: "ACCEPTED",
+        );
+
+        await _firestore
+            .collection("call_rooms")
+            .doc(currUserId)
+            .collection("call")
+            .add(call.toMap());
+        emit(CallAccepted());
+      }
+    } on FirebaseException catch (err) {
+      emit(CallError(msg: err.message.toString()));
     }
   }
 
-  // void openCall() async {
-  //   emit(CallPending());
-  //   final QuerySnapshot querySnapshot = await _firestore
-  //       .collection("call_rooms")
-  //       .doc(recieverID)
-  //       .collection("call")
-  //       .get();
-  //   if (querySnapshot.docs.isNotEmpty) {
-  //     int length = querySnapshot.docs.length;
-  //     final QueryDocumentSnapshot callData = querySnapshot.docs[length - 1];
-  //     if (callData["status"] == "ACCEPTED") {
-  //       emit(CallAccepted());
-  //     } else if (callData["status" == "PENDING"]) {}
-  //   }
-  // }
-  Stream<QuerySnapshot> openCall(String uid) {
+  Stream<QuerySnapshot> openCall() {
+    print("call is recieved to $recieverID");
+    if (recieverID!.isNotEmpty) {
+      emit(CallPending());
+    }
     final Stream<QuerySnapshot> querySnapshot = _firestore
         .collection("call_rooms")
-        .doc(uid)
+        .doc(recieverID)
         .collection("call")
+        .orderBy("timeStamp", descending: true)
         .snapshots();
     return querySnapshot;
   }
 
   Future<void> callUser(String recieverUid, String recieverEmail) async {
+    emit(CallInitial());
     final String currUserId = _firebaseAuth.currentUser!.uid;
     final String currUserEmail = _firebaseAuth.currentUser!.email.toString();
     callerID = currUserId;
@@ -108,8 +104,10 @@ class CallCubit extends Cubit<CallState> {
             call.toMap(),
           );
       calling = true;
+      emit(CallPending());
     } on FirebaseException catch (err) {
-      print("Errorr!!! ${err.message}");
+      // print("Errorr!!! ${err.message}");
+      emit(CallError(msg: err.message.toString()));
     }
   }
 }

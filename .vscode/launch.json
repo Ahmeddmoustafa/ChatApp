@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flutter (Emulator)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        // "args": ["--no-sound-null-safety"],
+        "flutterMode": "debug",
+      },
+      {
+        "name": "Flutter (Device)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        // "args": ["--no-sound-null-safety"],
+        "flutterMode": "debug",
+        "deviceId": "SDE0219C17004549"
+      }
+    ],
+    "compounds": [
+        {
+            "name": "All Devices",
+            "configurations": [
+                "Flutter (Emulator)",
+                "Flutter (Device)",
+              
+           ]
+        }
+    ]
+  }

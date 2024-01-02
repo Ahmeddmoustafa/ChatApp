@@ -27,18 +27,23 @@ class _AuthGateState extends State<AuthGate> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return StreamBuilder<QuerySnapshot>(
-                  stream:
-                      callInfo.openCall(FirebaseAuth.instance.currentUser!.uid),
+                  stream: callInfo.openCall(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                       print(snapshot.data!.docs.last["status"].toString());
-                      return const CallingPage(
-                        reciever: true,
-                      );
+                      if (snapshot.data!.docs.last["status"].toString() ==
+                          "PENDING") {
+                        print("page should be returned");
+                        return const CallingPage(reciever: true);
+                      }
+                      if (snapshot.data!.docs.last["status"].toString() ==
+                          "ACCEPTED") {
+                        return const HomePage();
+                      }
                     }
                     return const HomePage();
                   });
-              //  const HomePage();
+              // return const HomePage();
             }
             return const SignInPage();
           }),

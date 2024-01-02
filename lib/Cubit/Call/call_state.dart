@@ -11,7 +11,11 @@ class CallPending extends CallState {}
 
 class EndCall extends CallState {}
 
-class CallError extends CallState {}
+class CallError extends CallState {
+  final String msg;
+
+  CallError({required this.msg});
+}
 
 
 // class RecievedCall extends CallState {}
