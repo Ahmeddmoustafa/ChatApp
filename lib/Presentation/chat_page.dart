@@ -44,24 +44,24 @@ class _ChatPageState extends State<ChatPage> {
           BlocBuilder<CallCubit, CallState>(
             builder: (context, state) {
               if (state is CallError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.msg),
-                  backgroundColor: ColorManager.error,
-                  action: SnackBarAction(
-                    label: 'Close',
-                    onPressed: () {
-                      // Some code to undo the change.
-                    },
-                  ),
-                ));
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //   content: Text(state.msg),
+                //   backgroundColor: ColorManager.error,
+                //   action: SnackBarAction(
+                //     label: 'Close',
+                //     onPressed: () {
+                //       // Some code to undo the change.
+                //     },
+                //   ),
+                // ));
               }
               return GestureDetector(
                 onTap: () async {
                   await callinfo.callUser(
                       chatinfo.recieverUid, chatinfo.recieverEmail);
-                  // if (context.mounted) {
-                  //   Navigator.pushNamed(context, Routes.callingRoute);
-                  // }
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, Routes.authRoute);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: AppSize.s10),
