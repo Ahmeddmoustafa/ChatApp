@@ -16,11 +16,12 @@ class CallCubit extends Cubit<CallState> {
 
   Future<void> endCall() async {
     try {
-      await _firestore.collection("call_rooms").doc(recieverID).delete();
+      await _firestore
+          .collection("call_rooms")
+          .doc(recieverID)
+          .set({"status": "END"}, SetOptions(merge: true));
 
       calling = false;
-      // callerID = null;
-      // recieverID = null;
       emit(EndCall());
     } on FirebaseException catch (err) {
       print("end error ${err.message}");
@@ -32,17 +33,14 @@ class CallCubit extends Cubit<CallState> {
     final String currUserId = _firebaseAuth.currentUser!.uid;
     final String currUserEmail = _firebaseAuth.currentUser!.email.toString();
     try {
-      final QuerySnapshot querySnapshot = await _firestore
-          .collection("call_rooms")
-          .doc(currUserId)
-          .collection("call")
-          .get();
-      if (querySnapshot.docs.isNotEmpty) {
-        int length = querySnapshot.docs.length;
-        final QueryDocumentSnapshot callData = querySnapshot.docs[length - 1];
+      final DocumentSnapshot docSnapshot =
+          await _firestore.collection("call_rooms").doc(currUserId).get();
+      if (docSnapshot.exists && docSnapshot['status'] == 'PENDING') {
+        // int length = querySnapshot.docs.length;
+        // final QueryDocumentSnapshot callData = docSnapshot[]
         recieverID = currUserId;
-        callerID = callData["callerId"].toString();
-        String callerEmail = callData["callerEmail"].toString();
+        callerID = docSnapshot["callerId"].toString();
+        String callerEmail = docSnapshot["callerEmail"].toString();
 
         calling = true;
         print("the user $callerID is calling");
@@ -107,7 +105,6 @@ class CallCubit extends Cubit<CallState> {
       print("now we should call $recieverID");
       emit(CallPending());
     } on FirebaseException catch (err) {
-      print("Errorr!!! ${err.message}");
       emit(CallError(msg: err.message.toString()));
     }
   }

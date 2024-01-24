@@ -11,12 +11,17 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-          top: AppSize.s4, left: AppSize.s4, right: AppSize.s4),
+          top: AppSize.s8, left: AppSize.s8, right: AppSize.s8),
       padding: const EdgeInsets.symmetric(
           horizontal: AppSize.s20, vertical: AppSize.s4),
       decoration: BoxDecoration(
-        color: sender ? ColorManager.Blue : ColorManager.DarkGrey,
-        borderRadius: BorderRadius.circular(5.0),
+        color: sender ? ColorManager.LightGreen : ColorManager.LightGrey,
+        borderRadius: BorderRadius.only(
+          topRight: sender ? Radius.zero : const Radius.circular(AppSize.s10),
+          topLeft: sender ? const Radius.circular(AppSize.s10) : Radius.zero,
+          bottomLeft: const Radius.circular(AppSize.s10),
+          bottomRight: const Radius.circular(AppSize.s10),
+        ),
       ),
       child: Text(
         message,

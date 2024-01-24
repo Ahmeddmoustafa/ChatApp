@@ -3,8 +3,11 @@
 import 'package:flutter/cupertino.dart';
 
 class ColorManager {
-  static Color PrimaryColor = const Color(0xff000000);
+  static Color PrimaryColor = const Color(0xff1E1E1E);
   static Color Orange = const Color(0xffED9728);
+  static Color DarkBlue = const Color(0xff43116A);
+  static Color Green = const Color(0xff008000);
+  static Color LightGreen = const Color(0xff20A090);
 
   static Color DarkGrey = const Color(0xff525252);
   static Color LightGrey = const Color(0xff9E9E9E);

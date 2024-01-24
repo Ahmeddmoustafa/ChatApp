@@ -83,7 +83,7 @@ class RouteGenerator {
           return MaterialPageRoute(
             builder: (context) => SafeArea(
                 child: CallingPage(
-              reciever: false,
+              reciever: settings.arguments as bool,
             )),
           );
         }

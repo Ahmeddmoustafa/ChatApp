@@ -57,10 +57,11 @@ class _ChatPageState extends State<ChatPage> {
               }
               return GestureDetector(
                 onTap: () async {
-                  await callinfo.callUser(
-                      chatinfo.recieverUid, chatinfo.recieverEmail);
+                  // await callinfo.callUser(
+                  //     chatinfo.recieverUid, chatinfo.recieverEmail);
                   if (context.mounted) {
-                    Navigator.pushNamed(context, Routes.authRoute);
+                    Navigator.pushNamed(context, Routes.callingRoute,
+                        arguments: true);
                   }
                 },
                 child: Padding(

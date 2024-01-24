@@ -120,7 +120,7 @@ ThemeData getApplicationtheme(bool dark) {
         fontsize: FontSize.s14,
       ),
       bodySmall: getMediumStyle(
-        color: ColorManager.Black,
+        color: ColorManager.White,
         fontsize: FontSize.s12,
       ),
       displayMedium: getRegularStyle(

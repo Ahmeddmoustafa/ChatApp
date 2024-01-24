@@ -27,27 +27,27 @@ class _AuthGateState extends State<AuthGate> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return StreamBuilder<DocumentSnapshot>(
-                  stream: callInfo.openCall(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Error:  ${snapshot.error}");
-                    }
+              // return StreamBuilder<DocumentSnapshot>(
+              //     stream: callInfo.openCall(),
+              //     builder: (context, snapshot) {
+              //       if (snapshot.hasError) {
+              //         return Text("Error:  ${snapshot.error}");
+              //       }
 
-                    if (snapshot.hasData && snapshot.data!.exists) {
-                      final String status = snapshot.data!["status"].toString();
-                      print(status);
-                      if (status == "PENDING") {
-                        return const CallingPage(reciever: true);
-                      }
-                      if (status == "ACCEPTED") {
-                        return const HomePage();
-                      }
-                      return const HomePage();
-                    }
-                    return const HomePage();
-                  });
-              // return const HomePage();
+              //       if (snapshot.hasData && snapshot.data!.exists) {
+              //         final String status = snapshot.data!["status"].toString();
+              //         print(status);
+              //         if (status == "PENDING") {
+              //           return const CallingPage(reciever: true);
+              //         }
+              //         if (status == "ACCEPTED") {
+              //           return const HomePage();
+              //         }
+              //         return const HomePage();
+              //       }
+              //       return const HomePage();
+              //     });
+              return const HomePage();
             }
             return const SignInPage();
           }),
